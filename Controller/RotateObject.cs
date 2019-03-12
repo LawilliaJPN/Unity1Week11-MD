@@ -4,21 +4,59 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 public class RotateObject : ControllShaper2D {
-    [BoxGroup("Shaper2D"), ShowInInspector, ReadOnly]
+    [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
     private int rotationInitialValue;
+
+    [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
+    private float tempRotation;
+
+    [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
+    private bool isClockwise = true;
+
+    public bool IsClockwise {
+        get {
+            return isClockwise;
+        }
+        set {
+            isClockwise = value;
+        }
+    }
+
+    [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
+    private bool isRotation = true;
+
+    public bool IsRotation {
+        get {
+            return isRotation;
+        }
+        set {
+            isRotation = value;
+        }
+    }
 
     private void Start() {
         this.rotationInitialValue = Random.Range(0, 360 + 1);
     }
 
     private void Update() {
-        int newRotation = this.rotationInitialValue + (int)(360 * this.scriptBGMManager.GetRatioInBar());
+        if (!isRotation) {
+            return;
+        }
+
+        float newRotation = this.rotationInitialValue + 360 * this.scriptBGMManager.GetRatioInBar();
         this.UpdateRotation(newRotation);
     }
 
-    private void UpdateRotation(int newRotation) {
-        newRotation %= 360;
+    private void UpdateRotation(float newRotation) {
+        float rotation = newRotation - tempRotation;
+        tempRotation = newRotation;
 
-        this.shaper2D.rotation = newRotation;
+        rotation %= 360;
+ 
+        if (this.IsClockwise) {
+            rotation = 360.0f - rotation;
+        }
+
+        this.transform.Rotate(new Vector3(0, 0, rotation));
     }
 }

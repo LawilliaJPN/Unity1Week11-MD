@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 [RequireComponent(typeof(RotateObject))]
 [RequireComponent(typeof(PulseObject))]
 
-public class TargetManager : MonoBehaviour {
+public class BulletManager : MonoBehaviour {
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private MoveObject scriptMoveObject;
 
@@ -18,16 +18,16 @@ public class TargetManager : MonoBehaviour {
     private RotateObject scriptRotateObject;
 
     [BoxGroup("Shaper2D"), ShowInInspector, ReadOnly]
-    private const float MaxOfOuterRadiusRatio = 0.6f;
+    private const float MaxOfOuterRadiusRatio = 0.8f;
 
     [BoxGroup("Shaper2D"), ShowInInspector, ReadOnly]
     private const float MinOfOuterRadiusRatio = 0.1f;
 
     [BoxGroup("Shaper2D"), ShowInInspector, ReadOnly]
-    private const bool IsClockwise = true;
+    private const bool IsClockwise = false;
 
     [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
-    private float speedX = 0.02f;
+    private float speedX = -0.2f;
 
     public float SpeedX {
         get {
@@ -67,5 +67,4 @@ public class TargetManager : MonoBehaviour {
         this.scriptRotateObject.MinOfOuterRadiusRatio = MinOfOuterRadiusRatio;
         this.scriptRotateObject.IsClockwise = IsClockwise;
     }
-
 }

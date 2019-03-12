@@ -10,14 +10,15 @@ public class PulseObject : ControllShaper2D {
     }
 
     private void UpdateInnerRadius(float newInnerRadius) {
-        if (this.shaper2D.innerRadius >= this.shaper2D.outerRadius * this.MaxOfOuterRadiusRatio) {
+        if (newInnerRadius >= this.shaper2D.outerRadius * this.MaxOfOuterRadiusRatio) {
             this.shaper2D.innerRadius = this.shaper2D.outerRadius * this.MaxOfOuterRadiusRatio;
 
-        } else if (this.shaper2D.innerRadius <= this.shaper2D.outerRadius * this.MinOfOuterRadiusRatio) {
+        } else if (newInnerRadius <= this.shaper2D.outerRadius * this.MinOfOuterRadiusRatio) {
             this.shaper2D.innerRadius = this.shaper2D.outerRadius * this.MinOfOuterRadiusRatio;
 
         } else {
             this.shaper2D.innerRadius = newInnerRadius;
+
         }
     }
 }

@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 
 public class SEManager :AudioManager {
     [SerializeField, BoxGroup("Audio")]
-    private AudioClip seShot;
+    private AudioClip seTest;
 
     private void Start() {
         this.Volume = 0.7f;
@@ -13,13 +13,14 @@ public class SEManager :AudioManager {
     }
 
     private void Update() {
-        // デバッグ用
-        if (Input.GetKeyDown(KeyCode.RightShift)) {
-            // this.PlaySEShot();
+        if (Input.GetKeyDown(KeyCode.RightControl)) {
+            // デバッグ用
+            this.PlaySETest();
         }
     }
 
-    private void PlaySEShot() {
-        this.PlaySE(seShot);
+    private void PlaySETest() {
+        // デバッグ用
+        this.PlaySE(seTest);
     }
 }

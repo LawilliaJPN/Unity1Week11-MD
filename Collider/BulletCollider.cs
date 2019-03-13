@@ -6,35 +6,73 @@ using Sirenix.OdinInspector;
 [RequireComponent(typeof(BulletManager))]
 
 public class BulletCollider : MonoBehaviour {
+    [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
+    private GameObject objectParentOfGroups;
+
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private BulletManager scriptBulletManager;
 
+    [SerializeField, BoxGroup("Prefab")]
+    private GameObject prefabGroupParent;
+
     private void Awake() {
+        this.objectParentOfGroups = GameObject.FindWithTag("ParentOfGroups");
+
         this.scriptBulletManager = this.GetComponent<BulletManager>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag == "Target") {
+            TargetManager scriptTargetManager = collision.gameObject.GetComponent<TargetManager>();
 
-            if (!this.scriptBulletManager.IsChild) {
-                // Debug.Log("OnCollisionEnter2D BulletCollider Target Not IsChild");
+            GameObject objectGroupParent = null;
+            GameObject objectBulletParent = this.scriptBulletManager.ObjectMyParent;
+            GameObject objectTargetParent = scriptTargetManager.ObjectMyParent;
 
-                this.scriptBulletManager.IsChild = true;
-                this.scriptBulletManager.SpeedX = 0;
+            bool bulletIsIsolated = objectBulletParent.tag != "GroupParent";
+            bool targetIsIsolated = objectTargetParent.tag != "GroupParent";
 
-                this.transform.SetParent(collision.transform);
+            if (bulletIsIsolated && targetIsIsolated) {
+                objectGroupParent = Instantiate(this.prefabGroupParent) as GameObject;
+                objectGroupParent.transform.position = collision.transform.position;
+                objectGroupParent.transform.Rotate(collision.transform.localEulerAngles);
+                objectGroupParent.transform.SetParent(this.objectParentOfGroups.transform);
+
+            } else if (bulletIsIsolated) {
+                objectGroupParent = objectTargetParent;
 
             } else {
-                // Debug.Log("OnCollisionEnter2D BulletCollider Target IsChild");
+                objectGroupParent = objectBulletParent;
+            }
 
-                TargetManager scriptTargetManager = collision.gameObject.GetComponent<TargetManager>();
+            if (bulletIsIsolated) {
+                this.scriptBulletManager.BecomeChild(objectGroupParent);
+            }
 
-                scriptTargetManager.IsChild = true;
-                scriptTargetManager.SpeedX = 0;
+            if (targetIsIsolated) {
+                scriptTargetManager.BecomeChild(objectGroupParent);
+            }
 
-                collision.transform.SetParent(this.transform);
+            if (!bulletIsIsolated && !targetIsIsolated && (objectBulletParent != objectTargetParent)) {
+                // Debug.Log("parent  " + objectTargetParent.name);
+
+                foreach (Transform child in objectTargetParent.transform) {
+                    // Debug.Log("child " + child.gameObject.name);
+
+                    if (child.gameObject.tag == "Bullet") {
+                        child.gameObject.GetComponent<BulletManager>().BecomeChild(objectGroupParent);
+                        // Debug.Log("child Bullet" + child.gameObject.tag);
+
+                    } else if (child.gameObject.tag == "Target") {
+                        child.gameObject.GetComponent<TargetManager>().BecomeChild(objectGroupParent);
+                        // Debug.Log("child Target" + child.gameObject.tag);
+
+                    }
+                }
+
+                scriptTargetManager.BecomeChild(objectGroupParent);
+                Destroy(objectTargetParent);
             }
         }
-
     }
 }

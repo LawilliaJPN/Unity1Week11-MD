@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public class RotateObject : ControllShaper2D {
+public class RotateObject : MonoBehaviour {
+    [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
+    protected GameObject objectBGMManager;
+    [BoxGroup("Component"), ShowInInspector, ReadOnly]
+    protected BGMManager scriptBGMManager;
+
     [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
     private int rotationInitialValue;
 
@@ -32,6 +37,11 @@ public class RotateObject : ControllShaper2D {
         set {
             isRotation = value;
         }
+    }
+
+    private void Awake() {
+        this.objectBGMManager = GameObject.FindWithTag("BGMManager");
+        this.scriptBGMManager = this.objectBGMManager.GetComponent<BGMManager>();
     }
 
     private void Start() {

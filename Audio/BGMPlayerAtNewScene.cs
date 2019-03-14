@@ -19,15 +19,10 @@ public class BGMPlayerAtNewScene : MonoBehaviour {
         this.PlayBGMAtNewScene();
     }
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.RightAlt)) {
-            // デバッグ用
-            this.scriptBGMManager.SwitchBGM();
-        }
-    }
-
     public void PlayBGMAtNewScene() {
-        Debug.Log("PlayBGMAtNewScene / " + SceneManager.GetActiveScene().name);
+        if (ConstantManager.IsDebugMode) {
+            Debug.Log("PlayBGMAtNewScene / " + SceneManager.GetActiveScene().name);
+        }
 
         switch (SceneManager.GetActiveScene().name) {
             case "Title":

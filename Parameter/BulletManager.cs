@@ -4,20 +4,13 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 public class BulletManager : ChildManager {
-    private void Awake() {
-        this.AwakeChild();
-    }
-
     private void Start() {
+        this.IsRotation = true;
         this.IsClockwise = false;
 
-        this.MinOfOuterRadiusRatio = 0.1f;
-        this.MaxOfOuterRadiusRatio = 0.8f;
+        this.MaxOfOuterRadiusRatio = ConstantManager.OuterRadiusRatioMaxL;
+        this.MinOfOuterRadiusRatio = ConstantManager.OuterRadiusRatioMin;
 
-        this.SpeedX = -0.2f;
-
-        this.IsChild = false;
-
-        this.StartChild();
+        this.SpeedX = ConstantManager.BulletSpeed;
     }
 }

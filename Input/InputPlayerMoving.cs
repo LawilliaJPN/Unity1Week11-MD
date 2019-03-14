@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
 
 public class InputPlayerMoving :MonoBehaviour {
@@ -13,28 +12,26 @@ public class InputPlayerMoving :MonoBehaviour {
     }
 
     private void Update() {
-        if (SceneManager.GetActiveScene().name == "Game") {
-            this.SetPlayerSpeed();
-        }
+        this.SetPlayerSpeed();
     }
 
     private void SetPlayerSpeed() {
         Vector3 newSpeed = new Vector3(0, 0, 0);
 
         if ((Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.LeftArrow)) || (Input.GetKey(KeyCode.H))) {
-            newSpeed.x -= PlayerManager.SpeedX;
+            newSpeed.x -= this.scriptPlayerManager.SpeedX;
         }
 
         if ((Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.RightArrow)) || (Input.GetKey(KeyCode.L))) {
-            newSpeed.x += PlayerManager.SpeedX;
+            newSpeed.x += this.scriptPlayerManager.SpeedX;
         }
 
         if ((Input.GetKey(KeyCode.W)) || (Input.GetKey(KeyCode.UpArrow)) || (Input.GetKey(KeyCode.K))) {
-            newSpeed.y += PlayerManager.SpeedY;
+            newSpeed.y += this.scriptPlayerManager.SpeedY;
         }
 
         if ((Input.GetKey(KeyCode.S)) || (Input.GetKey(KeyCode.DownArrow)) || (Input.GetKey(KeyCode.J))) {
-            newSpeed.y -= PlayerManager.SpeedY;
+            newSpeed.y -= this.scriptPlayerManager.SpeedY;
         }
 
         this.scriptPlayerManager.Speed = newSpeed;

@@ -34,6 +34,8 @@ public class ChildManager : GroupManager {
             if (maxOfOuterRadiusRatio < this.MinOfOuterRadiusRatio) {
                 maxOfOuterRadiusRatio = this.MinOfOuterRadiusRatio;
             }
+
+            this.scriptPulseObject.MaxOfOuterRadiusRatio = MaxOfOuterRadiusRatio;
         }
     }
 
@@ -50,24 +52,12 @@ public class ChildManager : GroupManager {
             if (minOfOuterRadiusRatio > this.MaxOfOuterRadiusRatio) {
                 minOfOuterRadiusRatio = this.MaxOfOuterRadiusRatio;
             }
+
+            this.scriptPulseObject.MinOfOuterRadiusRatio = MinOfOuterRadiusRatio;
         }
     }
 
-    [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
-    private bool isChild;
-
-    public bool IsChild {
-        get {
-            return isChild;
-        }
-        set {
-            isChild = value;
-
-            this.scriptRotateObject.IsRotation = !isChild;
-        }
-    }
-
-    protected void AwakeChild() {
+    private void Awake() {
         this.objectMyParent = this.gameObject;
 
         this.scriptMoveObject = this.GetComponent<MoveObject>();
@@ -75,19 +65,15 @@ public class ChildManager : GroupManager {
         this.scriptRotateObject = this.GetComponent<RotateObject>();
     }
 
-    protected void StartChild() {
-        this.scriptMoveObject.Speed = new Vector3(this.SpeedX, this.scriptMoveObject.Speed.y, this.scriptMoveObject.Speed.z);
-
-        this.scriptPulseObject.MaxOfOuterRadiusRatio = MaxOfOuterRadiusRatio;
-        this.scriptPulseObject.MinOfOuterRadiusRatio = MinOfOuterRadiusRatio;
-
-        this.scriptRotateObject.IsClockwise = IsClockwise;
-    }
-
     public void BecomeChild(GameObject parent) {
+        ParentManager scriptParentManager = parent.GetComponent<ParentManager>();
+        scriptParentManager.AddListObjectChildren(this.gameObject);
+
         this.ObjectMyParent = parent;
-        this.IsChild = true;
+
+        this.IsRotation = false;
         this.SpeedX = 0;
+
         this.transform.SetParent(parent.transform);
     }
 }

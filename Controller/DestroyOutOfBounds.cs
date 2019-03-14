@@ -37,6 +37,10 @@ public class DestroyOutOfBounds : MonoBehaviour {
     }
 
     private void Update() {
+        if (this.gameObject.transform.parent.gameObject.tag == "GroupParent") {
+            return;
+        }
+
         if (this.transform.position.x < -this.RangeX) {
             this.Destroy();
 

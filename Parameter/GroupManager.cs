@@ -14,6 +14,20 @@ public class GroupManager : MonoBehaviour {
     protected RotateObject scriptRotateObject;
 
     [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
+    private bool isRotation;
+
+    public bool IsRotation {
+        get {
+            return isRotation;
+        }
+        set {
+            isRotation = value;
+
+            this.scriptRotateObject.IsRotation = isRotation;
+        }
+    }
+
+    [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
     private bool isClockwise;
 
     public bool IsClockwise {
@@ -22,6 +36,8 @@ public class GroupManager : MonoBehaviour {
         }
         set {
             isClockwise = value;
+
+            this.scriptRotateObject.IsClockwise = IsClockwise;
         }
     }
 
@@ -34,6 +50,7 @@ public class GroupManager : MonoBehaviour {
         }
         set {
             speedX = value;
+
             this.scriptMoveObject.Speed = new Vector3(speedX, this.scriptMoveObject.Speed.y, this.scriptMoveObject.Speed.z);
         }
     }

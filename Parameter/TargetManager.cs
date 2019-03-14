@@ -4,20 +4,13 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 public class TargetManager : ChildManager {
-    private void Awake() {
-        this.AwakeChild();
-    }
-
     private void Start() {
+        this.IsRotation = true;
         this.IsClockwise = true;
 
-        this.MinOfOuterRadiusRatio = 0.1f;
-        this.MaxOfOuterRadiusRatio = 0.6f;
+        this.MaxOfOuterRadiusRatio = ConstantManager.OuterRadiusRatioMax;
+        this.MinOfOuterRadiusRatio = ConstantManager.OuterRadiusRatioMin;
 
-        this.SpeedX = 0.02f;
-
-        this.IsChild = false;
-
-        this.StartChild();
+        this.SpeedX = ConstantManager.TargetSpeed;
     }
 }

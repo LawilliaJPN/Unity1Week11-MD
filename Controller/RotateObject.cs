@@ -10,10 +10,16 @@ public class RotateObject : MonoBehaviour {
     protected BGMManager scriptBGMManager;
 
     [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
-    private int rotationInitialValue;
-
-    [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
     private float tempRotation;
+
+    public float TempRotation {
+        get {
+            return tempRotation;
+        }
+        set {
+            tempRotation = value;
+        }
+    }
 
     [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
     private bool isClockwise = true;
@@ -44,29 +50,39 @@ public class RotateObject : MonoBehaviour {
         this.scriptBGMManager = this.objectBGMManager.GetComponent<BGMManager>();
     }
 
-    private void Start() {
-        this.rotationInitialValue = Random.Range(0, 360 + 1);
-    }
-
     private void Update() {
         if (!isRotation) {
             return;
         }
 
-        float newRotation = this.rotationInitialValue + 360 * this.scriptBGMManager.GetRatioInBar();
+        float newRotation = 360 * this.scriptBGMManager.GetRatioInBar();
+
         this.UpdateRotation(newRotation);
     }
 
     private void UpdateRotation(float newRotation) {
-        float rotation = newRotation - tempRotation;
-        tempRotation = newRotation;
+        float rotationAngleZ;
 
-        rotation %= 360;
- 
+        /*
+        if (this.gameObject.tag != "Bullet") {
+            Debug.Log("tempRotation" + tempRotation);
+            Debug.Log("newRotation" + newRotation);
+
+            Debug.Log("this.transform.localRotation.eulerAngles.z " + this.transform.localRotation.eulerAngles.z);
+            Debug.Log("this.transform.eulerAngles.z " + this.transform.eulerAngles.z);
+            Debug.Log("this.transform.rotation.eulerAngles.z " + this.transform.rotation.eulerAngles.z);
+        }*/
+
         if (this.IsClockwise) {
-            rotation = 360.0f - rotation;
+            rotationAngleZ = tempRotation - newRotation;
+
+        } else {
+            rotationAngleZ = newRotation - tempRotation;
         }
 
-        this.transform.Rotate(new Vector3(0, 0, rotation));
+        tempRotation = newRotation;
+        rotationAngleZ %= 360;
+
+        this.transform.Rotate(new Vector3(0, 0, rotationAngleZ));
     }
 }

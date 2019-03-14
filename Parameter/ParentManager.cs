@@ -4,16 +4,100 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 public class ParentManager : GroupManager {
+    [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
+    private List<GameObject> listObjectChildren = new List<GameObject>();
+
+    public List<GameObject> ListObjectChildren {
+        get {
+            return listObjectChildren;
+        }
+    }
+
+    [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
+    private int numOfTargetChildren, numOfBulletChildren;
+
+    public int NumOfTargetChildren {
+        get {
+            return numOfTargetChildren;
+        }
+        set {
+            numOfTargetChildren = value;
+
+            if (numOfTargetChildren < 0) {
+                numOfTargetChildren = 0;
+            }
+
+            this.UpdateParametersWhenChildrenIsIncreasing();
+        }
+    }
+
+    public int NumOfBulletChildren {
+        get {
+            return numOfBulletChildren;
+        }
+        set {
+            numOfBulletChildren = value;
+
+            if (numOfBulletChildren < 0) {
+                numOfBulletChildren = 0;
+            }
+
+            this.UpdateParametersWhenChildrenIsIncreasing();
+        }
+    }
+
     private void Awake() {
         this.scriptMoveObject = this.GetComponent<MoveObject>();
         this.scriptRotateObject = this.GetComponent<RotateObject>();
+
+        this.NumOfTargetChildren = 0;
+        this.NumOfBulletChildren = 0;
     }
 
-    private void Start() {
-        this.SpeedX = 0.02f;
-        this.scriptMoveObject.Speed = new Vector3(this.SpeedX, this.scriptMoveObject.Speed.y, this.scriptMoveObject.Speed.z);
+    public void SyncChild(TargetManager scriptTargetManager) {
+        Transform transformTarget = scriptTargetManager.gameObject.transform;
 
-        this.IsClockwise = true;
-        this.scriptRotateObject.IsClockwise = IsClockwise;
+        this.transform.position = transformTarget.position;
+        this.transform.Rotate(transformTarget.eulerAngles);
+
+        RotateObject scriptRotateObjectTarget = scriptTargetManager.gameObject.GetComponent<RotateObject>();
+        this.scriptRotateObject.TempRotation = scriptRotateObjectTarget.TempRotation;
+
+        this.IsRotation = scriptTargetManager.IsRotation;
+        this.IsClockwise = scriptTargetManager.IsClockwise;
+        this.SpeedX = scriptTargetManager.SpeedX;
+    }
+
+    public void AddListObjectChildren(GameObject objectChild) {
+        listObjectChildren.Add(objectChild);
+    }
+
+    private void UpdateParametersWhenChildrenIsIncreasing() {
+        int numOfChildren = this.NumOfBulletChildren + this.NumOfTargetChildren;
+
+        if (numOfChildren >= ConstantManager.ExplosionStandardNumOfChildren) {
+            this.Explosion();
+
+        /* なくてもいいかな
+        } else if (numOfChildren >= ConstantManager.FallStandardNumOfChildren) {
+
+
+        */
+
+        } else if (numOfChildren >= ConstantManager.StopStandardNumOfChildren) {
+            this.SpeedX = 0;
+
+        } else if (numOfChildren >= ConstantManager.SlowdownStandardNumOfChildren) {
+            this.SpeedX = ConstantManager.TargetSpeed / 2;
+
+        }
+    }
+
+    public void Explosion() {
+        int numOfChildren = this.NumOfBulletChildren + this.NumOfTargetChildren;
+
+        Debug.Log("Explosion " + numOfChildren);
+
+        Destroy(this.gameObject);
     }
 }

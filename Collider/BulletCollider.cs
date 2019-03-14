@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 
 [RequireComponent(typeof(BulletManager))]
 
-public class BulletCollider : MonoBehaviour {
+public class BulletCollider :MonoBehaviour {
     [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
     private GameObject objectParentOfGroups;
 
@@ -23,56 +23,125 @@ public class BulletCollider : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag == "Target") {
-            TargetManager scriptTargetManager = collision.gameObject.GetComponent<TargetManager>();
+            this.CollisionWithTarget(collision);
 
-            GameObject objectGroupParent = null;
-            GameObject objectBulletParent = this.scriptBulletManager.ObjectMyParent;
-            GameObject objectTargetParent = scriptTargetManager.ObjectMyParent;
+        } else if (collision.gameObject.tag == "Bullet") {
+            this.CollisionWithBullet(collision);
+        }
+    }
 
-            bool bulletIsIsolated = objectBulletParent.tag != "GroupParent";
-            bool targetIsIsolated = objectTargetParent.tag != "GroupParent";
+    private void CollisionWithTarget(Collision2D collision) {
+        if (ConstantManager.IsDebugMode) {
+            Debug.Log("BulletCollider CollisionWithTarget");
+        }
 
-            if (bulletIsIsolated && targetIsIsolated) {
-                objectGroupParent = Instantiate(this.prefabGroupParent) as GameObject;
-                objectGroupParent.transform.position = collision.transform.position;
-                objectGroupParent.transform.Rotate(collision.transform.localEulerAngles);
-                objectGroupParent.transform.SetParent(this.objectParentOfGroups.transform);
+        TargetManager scriptTargetManager = collision.gameObject.GetComponent<TargetManager>();
+        ParentManager scriptParentManager = null;
 
-            } else if (bulletIsIsolated) {
-                objectGroupParent = objectTargetParent;
+        GameObject objectGroupParent = null;
+        GameObject objectBulletParent = this.scriptBulletManager.ObjectMyParent;
+        GameObject objectTargetParent = scriptTargetManager.ObjectMyParent;
 
-            } else {
-                objectGroupParent = objectBulletParent;
-            }
+        bool bulletIsIsolated = objectBulletParent.tag != "GroupParent";
+        bool targetIsIsolated = objectTargetParent.tag != "GroupParent";
 
-            if (bulletIsIsolated) {
-                this.scriptBulletManager.BecomeChild(objectGroupParent);
-            }
+        if (bulletIsIsolated && targetIsIsolated) {
+            objectGroupParent = Instantiate(this.prefabGroupParent) as GameObject;
 
-            if (targetIsIsolated) {
-                scriptTargetManager.BecomeChild(objectGroupParent);
-            }
+        } else if (bulletIsIsolated) {
+            objectGroupParent = objectTargetParent;
 
-            if (!bulletIsIsolated && !targetIsIsolated && (objectBulletParent != objectTargetParent)) {
-                // Debug.Log("parent  " + objectTargetParent.name);
+        } else {
+            objectGroupParent = objectBulletParent;
+        }
 
-                foreach (Transform child in objectTargetParent.transform) {
-                    // Debug.Log("child " + child.gameObject.name);
+        scriptParentManager = objectGroupParent.GetComponent<ParentManager>();
 
-                    if (child.gameObject.tag == "Bullet") {
-                        child.gameObject.GetComponent<BulletManager>().BecomeChild(objectGroupParent);
-                        // Debug.Log("child Bullet" + child.gameObject.tag);
+        if (bulletIsIsolated && targetIsIsolated) {
+            scriptParentManager.SyncChild(scriptTargetManager);
 
-                    } else if (child.gameObject.tag == "Target") {
-                        child.gameObject.GetComponent<TargetManager>().BecomeChild(objectGroupParent);
-                        // Debug.Log("child Target" + child.gameObject.tag);
+            objectGroupParent.transform.SetParent(this.objectParentOfGroups.transform);
+        }
 
-                    }
+        if (bulletIsIsolated) {
+            this.scriptBulletManager.BecomeChild(objectGroupParent);
+            scriptParentManager.NumOfBulletChildren++;
+        }
+
+        if (targetIsIsolated) {
+            scriptTargetManager.BecomeChild(objectGroupParent);
+            scriptParentManager.NumOfTargetChildren++;
+        }
+
+        if (!bulletIsIsolated && !targetIsIsolated && (objectBulletParent != objectTargetParent)) {
+            // Debug.Log("parent  " + objectTargetParent.name);
+
+            ParentManager scriptTargetParentManager = objectTargetParent.GetComponent<ParentManager>();
+
+            foreach (GameObject child in scriptTargetParentManager.ListObjectChildren) {
+                Debug.Log("child " + child.gameObject.name);
+
+                if (child.tag == "Bullet") {
+                    child.GetComponent<BulletManager>().BecomeChild(objectGroupParent);
+                    Debug.Log("child Bullet " + child.name);
+
+                } else if (child.tag == "Target") {
+                    child.GetComponent<TargetManager>().BecomeChild(objectGroupParent);
+                    Debug.Log("child Target " + child.name);
+
                 }
-
-                scriptTargetManager.BecomeChild(objectGroupParent);
-                Destroy(objectTargetParent);
             }
+
+            /* 親要素のforeachで、時々、子要素を取得漏れする不具合あり
+
+            foreach (Transform child in objectTargetParent.transform) {
+                // Debug.Log("child " + child.gameObject.name);
+
+                if (child.gameObject.tag == "Bullet") {
+                    child.gameObject.GetComponent<BulletManager>().BecomeChild(objectGroupParent);
+                    // Debug.Log("child Bullet " + child.gameObject.name);
+
+                } else if (child.gameObject.tag == "Target") {
+                    child.gameObject.GetComponent<TargetManager>().BecomeChild(objectGroupParent);
+                    // Debug.Log("child Target " + child.gameObject.name);
+
+                }
+            }
+            */
+
+            scriptParentManager.NumOfBulletChildren += scriptTargetParentManager.NumOfBulletChildren;
+            scriptParentManager.NumOfTargetChildren += scriptTargetParentManager.NumOfTargetChildren;
+
+            Destroy(objectTargetParent);
+        }
+
+        /*
+        Debug.Log("----------");
+        Debug.Log("Bullet " + scriptParentManager.NumOfBulletChildren);
+        Debug.Log("Target " + scriptParentManager.NumOfTargetChildren);
+        Debug.Log("----------");
+        */
+    }
+
+    private void CollisionWithBullet(Collision2D collision) {
+        if (ConstantManager.IsDebugMode) {
+            Debug.Log("BulletCollider CollisionWithBullet");
+        }
+
+        BulletManager scriptCollisionBulletManager = collision.gameObject.GetComponent<BulletManager>();
+
+        GameObject objectThisParent = this.scriptBulletManager.ObjectMyParent;
+        GameObject objectCollisionBulletParent = scriptCollisionBulletManager.ObjectMyParent;
+
+        bool thisIsIsolated = objectThisParent.tag != "GroupParent";
+        bool collisionBulletIsIsolated = objectCollisionBulletParent.tag != "GroupParent";
+
+        if (thisIsIsolated) {
+            Destroy(this.gameObject);
+        }
+
+        if (collisionBulletIsIsolated) {
+            Destroy(collision.gameObject);
         }
     }
 }

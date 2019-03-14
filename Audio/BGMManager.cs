@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-public class BGMManager :AudioManager {
+public class BGMManager : AudioManager {
     [SerializeField, BoxGroup("Audio")]
     private AudioClip bgmTitle;  // Casual Fanny Track
     [BoxGroup("Audio BPM"), ShowInInspector, ReadOnly]

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
@@ -24,6 +25,13 @@ public class MoveObject : MonoBehaviour {
                 speed.y = 1.0f;
             } else if (speed.y < -1.0) { // 仮
                 speed.y = -1.0f;
+            }
+
+            if ((speed.x != 0) && (speed.y != 0)) {
+                float correction = (float)(Math.Sqrt(Math.Pow(speed.x, 2) + Math.Pow(speed.y, 2)));
+
+                speed.x *= Math.Abs(speed.x) / correction;
+                speed.y *= Math.Abs(speed.y) / correction;
             }
 
             speed.z = 0;

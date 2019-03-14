@@ -5,5 +5,4 @@ using Sirenix.OdinInspector;
 
 public class GameDirector :MonoBehaviour {
 
-
 }

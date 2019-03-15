@@ -19,6 +19,9 @@ public class ConstantManager : MonoBehaviour {
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
     public const string GameVersionText = "0.9.0";
 
+    [BoxGroup("Timer"), ShowInInspector, ReadOnly]
+    public const float GameTime = 70.0f;
+
 
     [BoxGroup("Speed"), ShowInInspector, ReadOnly]
     public const float BulletSpeed = -0.2f;
@@ -94,4 +97,19 @@ public class ConstantManager : MonoBehaviour {
     [BoxGroup("Shaper2D"), ShowInInspector, ReadOnly]
     public const float OuterRadiusRatioMin = 0.2f;
 
+
+    [BoxGroup("Tips"), ShowInInspector, ReadOnly]
+    public const int NumOfTipsInGame = 10;
+
+    [BoxGroup("Tips"), ShowInInspector, ReadOnly]
+    public const int OrderOfTipsMoveWASD = 0;
+
+    [BoxGroup("Tips"), ShowInInspector, ReadOnly]
+    public const int OrderOfTipsShootClick = 1;
+
+    [BoxGroup("Tips"), ShowInInspector, ReadOnly]
+    public const float TipsSpan = 7.0f;
+
+    [BoxGroup("Tips"), ShowInInspector, ReadOnly]
+    public const float HideTipsSpan = 6.5f;
 }

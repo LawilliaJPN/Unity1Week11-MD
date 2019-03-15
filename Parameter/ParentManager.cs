@@ -5,6 +5,11 @@ using Sirenix.OdinInspector;
 
 public class ParentManager : GroupManager {
     [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
+    private GameObject objectGameDirector;
+    [BoxGroup("Component"), ShowInInspector, ReadOnly]
+    private OutputTips scriptOutputTips;
+
+    [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
     private List<GameObject> listObjectChildren = new List<GameObject>();
 
     public List<GameObject> ListObjectChildren {
@@ -47,6 +52,9 @@ public class ParentManager : GroupManager {
     }
 
     private void Awake() {
+        this.objectGameDirector = GameObject.FindWithTag("Director");
+        this.scriptOutputTips = this.objectGameDirector.GetComponent<OutputTips>();
+
         this.scriptMoveObject = this.GetComponent<MoveObject>();
         this.scriptRotateObject = this.GetComponent<RotateObject>();
 
@@ -78,14 +86,24 @@ public class ParentManager : GroupManager {
         if (numOfChildren >= ConstantManager.ExplosionStandardNumOfChildren) {
             this.Explosion();
 
-        /* なくてもいいかな
-        } else if (numOfChildren >= ConstantManager.FallStandardNumOfChildren) {
+            if (!TipsBoolManager.isAlreadyTipsChildrenExplosion) {
+                this.scriptOutputTips.SetNextTips(TipsTextManager.TipsChildrenExplosion);
+                TipsBoolManager.isAlreadyTipsChildrenExplosion = true;
+            }
+
+            /* なくてもいいかな
+            } else if (numOfChildren >= ConstantManager.FallStandardNumOfChildren) {
 
 
-        */
+            */
 
         } else if (numOfChildren >= ConstantManager.StopStandardNumOfChildren) {
             this.SpeedX = 0;
+
+            if (!TipsBoolManager.isAlreadyTipsChildrenStop) {
+                this.scriptOutputTips.SetNextTips(TipsTextManager.TipsChildrenStop);
+                TipsBoolManager.isAlreadyTipsChildrenStop = true;
+            }
 
         } else if (numOfChildren >= ConstantManager.SlowdownStandardNumOfChildren) {
             this.SpeedX = ConstantManager.TargetSpeed / 2;

@@ -7,15 +7,22 @@ public class InputPlayerMoving :MonoBehaviour {
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private PlayerManager scriptPlayerManager;
 
+    [BoxGroup("Component"), ShowInInspector, ReadOnly]
+    private BulletGenerator scriptBulletGenerator;
+
     private void Awake() {
         this.scriptPlayerManager = this.GetComponent<PlayerManager>();
+        this.scriptBulletGenerator = this.GetComponent<BulletGenerator>();
     }
 
     private void Update() {
-        this.SetPlayerSpeed();
+        if (GameDirector.IsGameRunning) {
+            this.UpdatePlayerSpeed();
+            this.UpdatePlayerShoot();
+        }
     }
 
-    private void SetPlayerSpeed() {
+    private void UpdatePlayerSpeed() {
         Vector3 newSpeed = new Vector3(0, 0, 0);
 
         if ((Input.GetKey(KeyCode.A)) || (Input.GetKey(KeyCode.LeftArrow)) || (Input.GetKey(KeyCode.H))) {
@@ -35,5 +42,11 @@ public class InputPlayerMoving :MonoBehaviour {
         }
 
         this.scriptPlayerManager.Speed = newSpeed;
+    }
+
+    private void UpdatePlayerShoot() {
+        if ((Input.GetMouseButtonDown(0)) || (Input.GetKeyDown(KeyCode.Space))) {
+            this.scriptBulletGenerator.GenerateBullet();
+        }
     }
 }

@@ -10,6 +10,11 @@ public class BGMManager : AudioManager {
     private const int BpmBGMTitle = 135;
 
     [SerializeField, BoxGroup("Audio")]
+    private AudioClip bgmResult;  // Casual Fanny Track
+    [BoxGroup("Audio BPM"), ShowInInspector, ReadOnly]
+    private const int BpmBGMResult = 90;
+
+    [SerializeField, BoxGroup("Audio")]
     private AudioClip bgmWave1;  // Casual Arcade Track #3
     [BoxGroup("Audio BPM"), ShowInInspector, ReadOnly]
     private const int BpmBGMWave1 = 104;
@@ -111,6 +116,10 @@ public class BGMManager : AudioManager {
         this.ChangeMusic(this.bgmTitle, BpmBGMTitle);
     }
 
+    public void PlayBGMResult() {
+        this.ChangeMusic(this.bgmResult, BpmBGMResult);
+    }
+
     public void PlayBGMWave1() {
         this.ChangeMusic(this.bgmWave1, BpmBGMWave1);
     }
@@ -141,6 +150,9 @@ public class BGMManager : AudioManager {
             this.PlayBGMWave3B();
 
         } else if (this.audioSource.clip == this.bgmWave3B) {
+            this.PlayBGMResult();
+
+        } else if (this.audioSource.clip == this.bgmResult) {
             this.PlayBGMTitle();
         }
     }

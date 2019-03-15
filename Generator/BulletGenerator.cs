@@ -14,13 +14,11 @@ public class BulletGenerator : MonoBehaviour {
         this.objectParentOfBullets = GameObject.FindWithTag("ParentOfBullets");
     }
 
-    private void Update() {
-        if (Input.GetMouseButtonDown(0)) {
-            GenerateBullet();
+    public void GenerateBullet() {
+        if (!GameDirector.IsGameRunning) {
+            return;
         }
-    }
 
-    private void GenerateBullet() {
         GameObject bullet = Instantiate(this.prefabBullet, this.transform.position, Quaternion.identity) as GameObject;
         bullet.transform.SetParent(this.objectParentOfBullets.transform);
     }

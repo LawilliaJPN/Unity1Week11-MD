@@ -12,7 +12,9 @@ public class AutoEnemyMoving : MonoBehaviour {
     }
 
     private void Update() {
-        this.SetEnemySpeed();
+        if (GameDirector.IsGameRunning) {
+            this.SetEnemySpeed();
+        }
     }
 
     private void SetEnemySpeed() {

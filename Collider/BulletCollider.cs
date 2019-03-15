@@ -7,6 +7,11 @@ using Sirenix.OdinInspector;
 
 public class BulletCollider :MonoBehaviour {
     [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
+    private GameObject objectGameDirector;
+    [BoxGroup("Component"), ShowInInspector, ReadOnly]
+    private OutputTips scriptOutputTips;
+
+    [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
     private GameObject objectParentOfGroups;
 
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
@@ -16,6 +21,9 @@ public class BulletCollider :MonoBehaviour {
     private GameObject prefabGroupParent;
 
     private void Awake() {
+        this.objectGameDirector = GameObject.FindWithTag("Director");
+        this.scriptOutputTips = this.objectGameDirector.GetComponent<OutputTips>();
+
         this.objectParentOfGroups = GameObject.FindWithTag("ParentOfGroups");
 
         this.scriptBulletManager = this.GetComponent<BulletManager>();
@@ -47,6 +55,11 @@ public class BulletCollider :MonoBehaviour {
 
         if (bulletIsIsolated && targetIsIsolated) {
             objectGroupParent = Instantiate(this.prefabGroupParent) as GameObject;
+
+            if (!TipsBoolManager.isAlreadyTipsCollisionTargetAndBullet) {
+                this.scriptOutputTips.SetNextTips(TipsTextManager.TipsCollisionTargetAndBullet);
+                TipsBoolManager.isAlreadyTipsCollisionTargetAndBullet = true;
+            }
 
         } else if (bulletIsIsolated) {
             objectGroupParent = objectTargetParent;
@@ -142,6 +155,19 @@ public class BulletCollider :MonoBehaviour {
 
         if (collisionBulletIsIsolated) {
             Destroy(collision.gameObject);
+        }
+
+        if (thisIsIsolated && collisionBulletIsIsolated) {
+            if (!TipsBoolManager.isAlreadyTipsCollisionBulletAndBulletRapidFire) {
+                this.scriptOutputTips.SetNextTips(TipsTextManager.TipsCollisionBulletAndBulletRapidFire);
+                TipsBoolManager.isAlreadyTipsCollisionBulletAndBulletRapidFire = true;
+            }
+
+        } else if (thisIsIsolated || collisionBulletIsIsolated) {
+            if (!TipsBoolManager.isAlreadyTipsCollisionBulletAndBullet) {
+                this.scriptOutputTips.SetNextTips(TipsTextManager.TipsCollisionBulletAndBullet);
+                TipsBoolManager.isAlreadyTipsCollisionBulletAndBullet = true;
+            }
         }
     }
 }

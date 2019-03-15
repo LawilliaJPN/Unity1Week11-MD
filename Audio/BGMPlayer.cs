@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
 
-public class BGMPlayerAtNewScene : MonoBehaviour {
+public class BGMPlayer : MonoBehaviour {
     [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
-    private GameObject objectBGMManager;
+    protected GameObject objectBGMManager;
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
-    private BGMManager scriptBGMManager;
+    protected BGMManager scriptBGMManager;
 
     private void Awake() {
         this.objectBGMManager = GameObject.FindWithTag("BGMManager");
@@ -20,17 +20,29 @@ public class BGMPlayerAtNewScene : MonoBehaviour {
     }
 
     public void PlayBGMAtNewScene() {
-        if (ConstantManager.IsDebugMode) {
-            Debug.Log("PlayBGMAtNewScene / " + SceneManager.GetActiveScene().name);
-        }
-
         switch (SceneManager.GetActiveScene().name) {
             case "Title":
                 this.scriptBGMManager.PlayBGMTitle();
                 break;
             case "Game":
-                this.scriptBGMManager.PlayBGMWave1();
+                if (Random.Range(0, 1 + 1) == 0) {
+                    this.scriptBGMManager.PlayBGMWave1();
+                } else {
+                    this.scriptBGMManager.PlayBGMWave2();
+                }
                 break;
         }
+    }
+
+    public void PlayBGMLater() {
+        if (Random.Range(0, 1 + 1) == 0) {
+            this.scriptBGMManager.PlayBGMWave3A();
+        } else {
+            this.scriptBGMManager.PlayBGMWave3B();
+        }
+    }
+
+    public void PlayBGMResult() {
+        this.scriptBGMManager.PlayBGMResult();
     }
 }

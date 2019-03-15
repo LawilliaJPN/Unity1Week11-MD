@@ -10,6 +10,8 @@ public class TargetCollider :MonoBehaviour {
     private GameObject objectGameDirector;
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private DestroyAll scriptDestroyAll;
+    [BoxGroup("Component"), ShowInInspector, ReadOnly]
+    private OutputTips scriptOutputTips;
 
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private TargetManager scriptTargetManager;
@@ -17,6 +19,7 @@ public class TargetCollider :MonoBehaviour {
     private void Awake() {
         this.objectGameDirector = GameObject.FindWithTag("Director");
         this.scriptDestroyAll = this.objectGameDirector.GetComponent<DestroyAll>();
+        this.scriptOutputTips = this.objectGameDirector.GetComponent<OutputTips>();
 
         this.scriptTargetManager = this.GetComponent<TargetManager>();
     }
@@ -57,6 +60,11 @@ public class TargetCollider :MonoBehaviour {
         } else {
             objectCollisionTargetParent.GetComponent<ParentManager>().Explosion();
         }
+
+        if (!TipsBoolManager.isAlreadyTipsCollisionTargetAndTarget) {
+            this.scriptOutputTips.SetNextTips(TipsTextManager.TipsCollisionTargetAndTarget);
+            TipsBoolManager.isAlreadyTipsCollisionTargetAndTarget = true;
+        }
     }
 
     private void CollisionWithPlayer(Collision2D collision) {
@@ -65,5 +73,10 @@ public class TargetCollider :MonoBehaviour {
         }
 
         this.scriptDestroyAll.DestroyAllGroup();
+
+        if (!TipsBoolManager.isAlreadyTipsCollisionTargetAndPlayer) {
+            this.scriptOutputTips.SetNextTips(TipsTextManager.TipsCollisionTargetAndPlayer);
+            TipsBoolManager.isAlreadyTipsCollisionTargetAndPlayer = true;
+        }
     }
 }

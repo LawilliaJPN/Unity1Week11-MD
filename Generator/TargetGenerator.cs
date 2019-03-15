@@ -20,7 +20,9 @@ public class TargetGenerator : MonoBehaviour {
     }
 
     private void Update() {
-        this.scriptEnemyManager.CoolTime -= Time.deltaTime;
+        if (GameDirector.IsGameRunning) {
+            this.scriptEnemyManager.CoolTime -= Time.deltaTime;
+        }
 
         if (this.scriptEnemyManager.CoolTime <= 0) {
             GenerateTarget();
@@ -28,6 +30,10 @@ public class TargetGenerator : MonoBehaviour {
     }
 
     private void GenerateTarget() {
+        if (!GameDirector.IsGameRunning) {
+            return;
+        }
+
         GameObject target = Instantiate(this.prefabTarget, this.transform.position, Quaternion.identity) as GameObject;
         target.transform.SetParent(this.objectParentOfTargets.transform);
 

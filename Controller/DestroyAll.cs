@@ -7,9 +7,12 @@ public class DestroyAll : MonoBehaviour {
     [SerializeField, BoxGroup("GameObject")]
     protected GameObject objectGroups;
 
-    public void DestroyAllGroup() {
+    public void DestroyAllGroup(ConstantManager.PointRatioType pointRatioType) {
         foreach (Transform group in objectGroups.transform) {
             if (group.gameObject.tag == "GroupParent") {
+                ParentManager scriptParentManager = group.gameObject.GetComponent<ParentManager>();
+                ScoreManager.AddScoreToDestroyGroup(scriptParentManager.NumOfTargetChildren , pointRatioType);
+
                 Destroy(group.gameObject);
 
             } else if (group.gameObject.tag == "ParentOfBullets") {

@@ -25,10 +25,6 @@ public class TipsBoolManager : MonoBehaviour {
     [BoxGroup("Children"), ShowInInspector, ReadOnly]
     public static bool isAlreadyTipsChildrenExplosion;
 
-    private void Awake() {
-        SetIsAlreadyTipsFalse();
-    }
-
     public static void SetIsAlreadyTipsFalse() {
         isAlreadyTipsCollisionBulletAndBullet = false;
         isAlreadyTipsCollisionBulletAndBulletRapidFire = false;

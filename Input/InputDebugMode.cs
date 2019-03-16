@@ -41,7 +41,7 @@ public class InputDebugMode : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Delete)) {
             if (SceneManager.GetActiveScene().name == "Game") {
-                this.scriptDestroyAll.DestroyAllGroup();
+                this.scriptDestroyAll.DestroyAllGroup(ConstantManager.PointRatioType.Debug);
             }
         }
 

@@ -40,19 +40,17 @@ public class OutputTips : MonoBehaviour {
         this.arrayTextTips[ConstantManager.OrderOfTipsShootClick] = TipsTextManager.TipsControllShootClick;
 
         this.SetTipsRandomlyList();
-        this.UpdateOutputTipsInGame();
     }
 
     private void Update() {
-        if (GameDirector.IsGameRunning) {
-            if (GameDirector.TimerInGame < this.standardOfNextTimer) {
-                this.UpdateOutputTipsInGame();
-            }
-
-        } else {
+        if (!GameDirector.IsGameRunning) {
             this.HideTips();
+            return;
         }
 
+        if (GameDirector.TimerInGame < this.standardOfNextTimer) {
+            this.UpdateOutputTipsInGame();
+        }
     }
 
     public void UpdateOutputTipsInGame() {
@@ -80,7 +78,7 @@ public class OutputTips : MonoBehaviour {
 
     private void OutputTipsInGame(string newTextTips) {
         if (ConstantManager.IsDebugMode) {
-            Debug.Log("OutputTips OutputTipsInGame / Timer:" + ConstantManager.GameTime + "TipsNum:" + this.currentTipsNumber);
+            Debug.Log("OutputTips OutputTipsInGame / Timer:" + GameDirector.TimerInGame + "TipsNum:" + this.currentTipsNumber);
         }
 
         this.textTipsInGame.text = "[Tips] " + newTextTips;
@@ -91,7 +89,7 @@ public class OutputTips : MonoBehaviour {
         } 
 
         this.currentTipsNumber++;
-        this.standardOfNextTimer = ConstantManager.GameTime - (this.currentTipsNumber * ConstantManager.TipsSpan);
+        this.standardOfNextTimer = GameDirector.TimerInGame - ConstantManager.TipsSpan;
 
         Invoke("HideTips", ConstantManager.HideTipsSpan);
     }
@@ -108,10 +106,15 @@ public class OutputTips : MonoBehaviour {
         this.listTextTipsRandomly.Add(TipsTextManager.TipsControllMoveArrow);
         this.listTextTipsRandomly.Add(TipsTextManager.TipsControllMoveHJKL);
         this.listTextTipsRandomly.Add(TipsTextManager.TipsControllShootSpace);
+
         this.listTextTipsRandomly.Add(TipsTextManager.TipsChildrenSlowdown);
+
         this.listTextTipsRandomly.Add(TipsTextManager.TipsAdviceConnect);
         this.listTextTipsRandomly.Add(TipsTextManager.TipsAdviceRight);
         this.listTextTipsRandomly.Add(TipsTextManager.TipsAdviceNotRapidFire);
+
+        this.listTextTipsRandomly.Add(TipsTextManager.TipsScoreWhenBulletCollideWithTarget);
+        this.listTextTipsRandomly.Add(TipsTextManager.TipsScoreWhenGroupBulletCollideWithTarget);
     }
 
     private string GetTipsRandomly() {

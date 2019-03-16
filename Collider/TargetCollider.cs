@@ -13,6 +13,11 @@ public class TargetCollider :MonoBehaviour {
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private OutputTips scriptOutputTips;
 
+    [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
+    private GameObject objectSEManager;
+    [BoxGroup("Component"), ShowInInspector, ReadOnly]
+    private SEManager scriptSEManager;
+
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private TargetManager scriptTargetManager;
 
@@ -20,6 +25,9 @@ public class TargetCollider :MonoBehaviour {
         this.objectGameDirector = GameObject.FindWithTag("Director");
         this.scriptDestroyAll = this.objectGameDirector.GetComponent<DestroyAll>();
         this.scriptOutputTips = this.objectGameDirector.GetComponent<OutputTips>();
+
+        this.objectSEManager = GameObject.FindWithTag("SEManager");
+        this.scriptSEManager = this.objectSEManager.GetComponent<SEManager>();
 
         this.scriptTargetManager = this.GetComponent<TargetManager>();
     }
@@ -38,6 +46,12 @@ public class TargetCollider :MonoBehaviour {
             Debug.Log("TargetCollider CollisionWithTarget");
         }
 
+        if (this.transform.position.x < collision.transform.position.x) {
+            return;
+        }
+
+        this.scriptSEManager.PlaySETargetVanish();
+
         TargetManager scriptCollisionTargetManager = collision.gameObject.GetComponent<TargetManager>();
 
         GameObject objectThisParent = this.scriptTargetManager.ObjectMyParent;
@@ -46,24 +60,24 @@ public class TargetCollider :MonoBehaviour {
         bool thisIsIsolated = objectThisParent.tag != "GroupParent";
         bool collisionBulletIsIsolated = objectCollisionTargetParent.tag != "GroupParent";
 
+        if (!TipsBoolManager.isAlreadyTipsCollisionTargetAndTarget) {
+            this.scriptOutputTips.SetNextTips(TipsTextManager.TipsCollisionTargetAndTarget);
+            TipsBoolManager.isAlreadyTipsCollisionTargetAndTarget = true;
+        }
+
+        if (collisionBulletIsIsolated) {
+            Destroy(collision.gameObject);
+
+        } else {
+            objectCollisionTargetParent.GetComponent<ParentManager>().Explosion(ConstantManager.PointRatioType.TargetCollideWithTarget);
+        }
+
         if (thisIsIsolated) {
             Destroy(this.gameObject);
 
         } else {
-            objectThisParent.GetComponent<ParentManager>().Explosion();
+            objectThisParent.GetComponent<ParentManager>().Explosion(ConstantManager.PointRatioType.TargetCollideWithTarget);
 
-        }
-
-        if (collisionBulletIsIsolated) {
-            Destroy(this.gameObject);
-
-        } else {
-            objectCollisionTargetParent.GetComponent<ParentManager>().Explosion();
-        }
-
-        if (!TipsBoolManager.isAlreadyTipsCollisionTargetAndTarget) {
-            this.scriptOutputTips.SetNextTips(TipsTextManager.TipsCollisionTargetAndTarget);
-            TipsBoolManager.isAlreadyTipsCollisionTargetAndTarget = true;
         }
     }
 
@@ -72,7 +86,9 @@ public class TargetCollider :MonoBehaviour {
             Debug.Log("TargetCollider CollisionWithPlayer");
         }
 
-        this.scriptDestroyAll.DestroyAllGroup();
+        this.scriptSEManager.PlaySEDamage();
+
+        this.scriptDestroyAll.DestroyAllGroup(ConstantManager.PointRatioType.PlayerCollideWithTarget);
 
         if (!TipsBoolManager.isAlreadyTipsCollisionTargetAndPlayer) {
             this.scriptOutputTips.SetNextTips(TipsTextManager.TipsCollisionTargetAndPlayer);

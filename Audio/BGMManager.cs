@@ -91,7 +91,7 @@ public class BGMManager : AudioManager {
 
 
     private void Start() {
-        this.Volume = 0.8f;
+        this.Volume = ConstantManager.InitialVolumeBGM;
         this.UpdateVolume();
         this.audioSource.loop = true;
     }

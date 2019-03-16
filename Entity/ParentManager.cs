@@ -10,6 +10,11 @@ public class ParentManager : GroupManager {
     private OutputTips scriptOutputTips;
 
     [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
+    private GameObject objectSEManager;
+    [BoxGroup("Component"), ShowInInspector, ReadOnly]
+    private SEManager scriptSEManager;
+
+    [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
     private List<GameObject> listObjectChildren = new List<GameObject>();
 
     public List<GameObject> ListObjectChildren {
@@ -31,8 +36,6 @@ public class ParentManager : GroupManager {
             if (numOfTargetChildren < 0) {
                 numOfTargetChildren = 0;
             }
-
-            this.UpdateParametersWhenChildrenIsIncreasing();
         }
     }
 
@@ -46,14 +49,15 @@ public class ParentManager : GroupManager {
             if (numOfBulletChildren < 0) {
                 numOfBulletChildren = 0;
             }
-
-            this.UpdateParametersWhenChildrenIsIncreasing();
         }
     }
 
     private void Awake() {
         this.objectGameDirector = GameObject.FindWithTag("Director");
         this.scriptOutputTips = this.objectGameDirector.GetComponent<OutputTips>();
+
+        this.objectSEManager = GameObject.FindWithTag("SEManager");
+        this.scriptSEManager = this.objectSEManager.GetComponent<SEManager>();
 
         this.scriptMoveObject = this.GetComponent<MoveObject>();
         this.scriptRotateObject = this.GetComponent<RotateObject>();
@@ -80,22 +84,26 @@ public class ParentManager : GroupManager {
         listObjectChildren.Add(objectChild);
     }
 
-    private void UpdateParametersWhenChildrenIsIncreasing() {
+    public void UpdateParametersWhenChildrenIsIncreasing() {
         int numOfChildren = this.NumOfBulletChildren + this.NumOfTargetChildren;
 
         if (numOfChildren >= ConstantManager.ExplosionStandardNumOfChildren) {
-            this.Explosion();
+            if (this.NumOfTargetChildren >= 3) {
+                this.scriptSEManager.PlaySEDestroy3();
+
+            } else if (this.NumOfTargetChildren >= 2) {
+                this.scriptSEManager.PlaySEDestroy2();
+
+            } else {
+                this.scriptSEManager.PlaySEDestroy1();
+            }
+
+            this.Explosion(ConstantManager.PointRatioType.BulletCollideWithTarget);
 
             if (!TipsBoolManager.isAlreadyTipsChildrenExplosion) {
                 this.scriptOutputTips.SetNextTips(TipsTextManager.TipsChildrenExplosion);
                 TipsBoolManager.isAlreadyTipsChildrenExplosion = true;
             }
-
-            /* なくてもいいかな
-            } else if (numOfChildren >= ConstantManager.FallStandardNumOfChildren) {
-
-
-            */
 
         } else if (numOfChildren >= ConstantManager.StopStandardNumOfChildren) {
             this.SpeedX = 0;
@@ -106,15 +114,30 @@ public class ParentManager : GroupManager {
             }
 
         } else if (numOfChildren >= ConstantManager.SlowdownStandardNumOfChildren) {
-            this.SpeedX = ConstantManager.TargetSpeed / 2;
+            switch (GameDirector.CurrentWave) {
+                case 1:
+                    this.SpeedX = ConstantManager.TargetSpeedWave1 / 2;
+                    break;
 
+                case 2:
+                    this.SpeedX = ConstantManager.TargetSpeedWave2 / 2;
+                    break;
+
+                case 3:
+                    this.SpeedX = ConstantManager.TargetSpeedWave3 / 2;
+                    break;
+            }
         }
     }
 
-    public void Explosion() {
+    public void Explosion(ConstantManager.PointRatioType pointRatioType) {
         int numOfChildren = this.NumOfBulletChildren + this.NumOfTargetChildren;
 
-        Debug.Log("Explosion " + numOfChildren);
+        if (ConstantManager.IsDebugMode) {
+            Debug.Log("Explosion " + numOfChildren);
+        }
+    
+        ScoreManager.AddScoreToDestroyGroup(this.NumOfTargetChildren, pointRatioType);
 
         Destroy(this.gameObject);
     }

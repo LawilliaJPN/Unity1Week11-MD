@@ -24,17 +24,18 @@ public class BGMPlayer : MonoBehaviour {
             case "Title":
                 this.scriptBGMManager.PlayBGMTitle();
                 break;
-            case "Game":
-                if (Random.Range(0, 1 + 1) == 0) {
-                    this.scriptBGMManager.PlayBGMWave1();
-                } else {
-                    this.scriptBGMManager.PlayBGMWave2();
-                }
-                break;
         }
     }
 
-    public void PlayBGMLater() {
+    public void PlayBGMWave1() {
+        this.scriptBGMManager.PlayBGMWave1();
+    }
+
+    public void PlayBGMWave2() {
+        this.scriptBGMManager.PlayBGMWave2();
+    }
+
+    public void PlayBGMWave3() {
         if (Random.Range(0, 1 + 1) == 0) {
             this.scriptBGMManager.PlayBGMWave3A();
         } else {

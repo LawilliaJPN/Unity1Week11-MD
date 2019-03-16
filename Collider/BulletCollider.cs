@@ -12,6 +12,11 @@ public class BulletCollider :MonoBehaviour {
     private OutputTips scriptOutputTips;
 
     [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
+    private GameObject objectSEManager;
+    [BoxGroup("Component"), ShowInInspector, ReadOnly]
+    private SEManager scriptSEManager;
+
+    [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
     private GameObject objectParentOfGroups;
 
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
@@ -23,6 +28,9 @@ public class BulletCollider :MonoBehaviour {
     private void Awake() {
         this.objectGameDirector = GameObject.FindWithTag("Director");
         this.scriptOutputTips = this.objectGameDirector.GetComponent<OutputTips>();
+
+        this.objectSEManager = GameObject.FindWithTag("SEManager");
+        this.scriptSEManager = this.objectSEManager.GetComponent<SEManager>();
 
         this.objectParentOfGroups = GameObject.FindWithTag("ParentOfGroups");
 
@@ -52,6 +60,19 @@ public class BulletCollider :MonoBehaviour {
 
         bool bulletIsIsolated = objectBulletParent.tag != "GroupParent";
         bool targetIsIsolated = objectTargetParent.tag != "GroupParent";
+
+        if (objectBulletParent == objectTargetParent) {
+            return;
+        }
+
+        this.scriptSEManager.PlaySEBulletHit();
+
+        if (bulletIsIsolated) {
+            ScoreManager.AddScoreWhenBulletCollideWithTarget();
+
+        } else {
+            ScoreManager.AddScoreWhenGroupBulletCollideWithTarget();
+        }
 
         if (bulletIsIsolated && targetIsIsolated) {
             objectGroupParent = Instantiate(this.prefabGroupParent) as GameObject;
@@ -86,7 +107,7 @@ public class BulletCollider :MonoBehaviour {
             scriptParentManager.NumOfTargetChildren++;
         }
 
-        if (!bulletIsIsolated && !targetIsIsolated && (objectBulletParent != objectTargetParent)) {
+        if (!bulletIsIsolated && !targetIsIsolated) {
             // Debug.Log("parent  " + objectTargetParent.name);
 
             ParentManager scriptTargetParentManager = objectTargetParent.GetComponent<ParentManager>();
@@ -124,9 +145,11 @@ public class BulletCollider :MonoBehaviour {
 
             scriptParentManager.NumOfBulletChildren += scriptTargetParentManager.NumOfBulletChildren;
             scriptParentManager.NumOfTargetChildren += scriptTargetParentManager.NumOfTargetChildren;
-
+            
             Destroy(objectTargetParent);
         }
+
+        scriptParentManager.UpdateParametersWhenChildrenIsIncreasing();
 
         /*
         Debug.Log("----------");
@@ -141,6 +164,10 @@ public class BulletCollider :MonoBehaviour {
             Debug.Log("BulletCollider CollisionWithBullet");
         }
 
+        if (this.transform.position.x < collision.transform.position.x) {
+            return;
+        }
+
         BulletManager scriptCollisionBulletManager = collision.gameObject.GetComponent<BulletManager>();
 
         GameObject objectThisParent = this.scriptBulletManager.ObjectMyParent;
@@ -149,12 +176,8 @@ public class BulletCollider :MonoBehaviour {
         bool thisIsIsolated = objectThisParent.tag != "GroupParent";
         bool collisionBulletIsIsolated = objectCollisionBulletParent.tag != "GroupParent";
 
-        if (thisIsIsolated) {
-            Destroy(this.gameObject);
-        }
-
-        if (collisionBulletIsIsolated) {
-            Destroy(collision.gameObject);
+        if (thisIsIsolated || collisionBulletIsIsolated) {
+            this.scriptSEManager.PlaySEBulletVanish();
         }
 
         if (thisIsIsolated && collisionBulletIsIsolated) {
@@ -168,6 +191,14 @@ public class BulletCollider :MonoBehaviour {
                 this.scriptOutputTips.SetNextTips(TipsTextManager.TipsCollisionBulletAndBullet);
                 TipsBoolManager.isAlreadyTipsCollisionBulletAndBullet = true;
             }
+        }
+
+        if (collisionBulletIsIsolated) {
+            Destroy(collision.gameObject);
+        }
+
+        if (thisIsIsolated) {
+            Destroy(this.gameObject);
         }
     }
 }

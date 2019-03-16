@@ -8,19 +8,78 @@ public class ConstantManager : MonoBehaviour {
     public const bool IsDebugMode = true;
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
-    public const int GameVersion = 0;
+    public const int GameVersion = 1;
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
-    public const int GameVersionMajor = 9;
+    public const int GameVersionMajor = 0;
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
     public const int GameVersionMinor = 0;
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
-    public const string GameVersionText = "0.9.0";
+    public const string GameVersionText = "1.0.0";
+
 
     [BoxGroup("Timer"), ShowInInspector, ReadOnly]
-    public const float GameTime = 70.0f;
+    public const int NumberOfWaves = 3;
+
+    [BoxGroup("Timer"), ShowInInspector, ReadOnly]
+    public const float GameTimeWave1 = 35.0f;
+
+    [BoxGroup("Timer"), ShowInInspector, ReadOnly]
+    public const float GameTimeWave2 = 35.0f;
+
+    [BoxGroup("Timer"), ShowInInspector, ReadOnly]
+    public const float GameTimeWave3 = 35.0f;
+
+    [BoxGroup("Timer"), ShowInInspector, ReadOnly]
+    public const float TimeDisplayTextWave = 3.0f;
+
+    [BoxGroup("Timer"), ShowInInspector, ReadOnly]
+    public const float StandardOfTimerEmphasis = 5.0f;
+
+
+    [BoxGroup("Score"), ShowInInspector, ReadOnly]
+    public const int PointWhenBulletCollideWithTarget = 1;
+
+    [BoxGroup("Score"), ShowInInspector, ReadOnly]
+    public const int PointWhenGroupBulletCollideWithTarget = 5;
+
+    public enum PointNumOfTarget { // 配列を constには できないっぽいから 代用
+        One = 5,
+        Two = 25,
+        Three = 100,
+        FourOrMore = 200
+    }
+
+    public enum PointRatioType {
+        Debug = 0,
+        PlayerCollideWithTarget = 1,
+        TargetCollideWithTarget = 2,
+        OutOfBounds = 3,
+        WaveFinish = 4,
+        BulletCollideWithTarget = 5
+    }
+    /*
+    [BoxGroup("Score"), ShowInInspector, ReadOnly]
+    public const int PointRatioToDestroyWhenPlayerCollideWithTarget = 1;
+
+    [BoxGroup("Score"), ShowInInspector, ReadOnly]
+    public const int PointRatioToDestroyWhenTargetCollideWithTarget = 2;
+
+    [BoxGroup("Score"), ShowInInspector, ReadOnly]
+    public const int PointRatioToDestroyWhenWaveFinish = 4;
+
+    [BoxGroup("Score"), ShowInInspector, ReadOnly]
+    public const int PointRatioToDestroyWhenBulletCollideWithTarget = 5;
+    */
+
+
+    [BoxGroup("Audio"), ShowInInspector, ReadOnly]
+    public const float InitialVolumeBGM = 0.6f;
+
+    [BoxGroup("Audio"), ShowInInspector, ReadOnly]
+    public const float InitialVolumeSE = 0.9f;
 
 
     [BoxGroup("Speed"), ShowInInspector, ReadOnly]
@@ -39,7 +98,13 @@ public class ConstantManager : MonoBehaviour {
     public const float PlayerVerticalSpeed = 0.15f;  // 前後
 
     [BoxGroup("Speed"), ShowInInspector, ReadOnly]
-    public const float TargetSpeed = 0.06f;
+    public const float TargetSpeedWave1 = 0.04f;
+
+    [BoxGroup("Speed"), ShowInInspector, ReadOnly]
+    public const float TargetSpeedWave2 = 0.08f;
+
+    [BoxGroup("Speed"), ShowInInspector, ReadOnly]
+    public const float TargetSpeedWave3 = 0.12f;
 
 
     [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
@@ -67,6 +132,13 @@ public class ConstantManager : MonoBehaviour {
     public const float PlayerRangeYMin = -3.5f;
 
 
+    [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
+    public const float OutOfBoundsRangeX = 15.0f;
+
+    [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
+    public const float OutOfBoundsRangeY = 10.0f;
+
+
     [BoxGroup("Children"), ShowInInspector, ReadOnly]
     public const int ExplosionStandardNumOfChildren = 5;
 
@@ -81,7 +153,13 @@ public class ConstantManager : MonoBehaviour {
 
 
     [BoxGroup("Generater"), ShowInInspector, ReadOnly]
-    public const float TargetGeneratorCoolTime = 3.0f;
+    public const float TargetGeneratorCoolTimeWave1 = 3.2f;
+
+    [BoxGroup("Generater"), ShowInInspector, ReadOnly]
+    public const float TargetGeneratorCoolTimeWave2 = 2.4f;
+
+    [BoxGroup("Generater"), ShowInInspector, ReadOnly]
+    public const float TargetGeneratorCoolTimeWave3 = 1.2f;
 
 
     [BoxGroup("Auto"), ShowInInspector, ReadOnly]
@@ -99,7 +177,7 @@ public class ConstantManager : MonoBehaviour {
 
 
     [BoxGroup("Tips"), ShowInInspector, ReadOnly]
-    public const int NumOfTipsInGame = 10;
+    public const int NumOfTipsInGame = 15;
 
     [BoxGroup("Tips"), ShowInInspector, ReadOnly]
     public const int OrderOfTipsMoveWASD = 0;

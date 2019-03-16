@@ -4,8 +4,11 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 public class DestroyOutOfBounds : MonoBehaviour {
+    [BoxGroup("Component"), ShowInInspector, ReadOnly]
+    private ParentManager scriptParentManager;
+
     [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
-    private float rangeX = 15.0f;
+    private float rangeX = ConstantManager.OutOfBoundsRangeX;
 
     public float RangeX {
         get {
@@ -21,7 +24,7 @@ public class DestroyOutOfBounds : MonoBehaviour {
     }
 
     [BoxGroup("Parameter"), ShowInInspector, ReadOnly]
-    private float rangeY = 10.0f;
+    private float rangeY = ConstantManager.OutOfBoundsRangeY;
 
     public float RangeY {
         get {
@@ -36,27 +39,38 @@ public class DestroyOutOfBounds : MonoBehaviour {
         }
     }
 
+    private void Awake() {
+        if (this.gameObject.tag == "GroupParent") {
+            this.scriptParentManager = this.GetComponent<ParentManager>();
+        }
+    }
+
     private void Update() {
         if (this.gameObject.transform.parent.gameObject.tag == "GroupParent") {
             return;
         }
 
         if (this.transform.position.x < -this.RangeX) {
-            this.Destroy();
+            this.DestroyOutOfBoundsObject();
 
         } else if (this.transform.position.x > this.RangeX) {
-            this.Destroy();
+            this.DestroyOutOfBoundsObject();
 
         } else if (this.transform.position.y < -this.RangeY) {
-            this.Destroy();
+            this.DestroyOutOfBoundsObject();
 
         } else if (this.transform.position.y > this.RangeY) {
-            this.Destroy();
+            this.DestroyOutOfBoundsObject();
 
         }
     }
 
-    private void Destroy() {
-        Destroy(this.gameObject);
+    private void DestroyOutOfBoundsObject() {
+        if (this.gameObject.tag == "GroupParent") {
+            this.scriptParentManager.Explosion(ConstantManager.PointRatioType.OutOfBounds);
+
+        } else {
+            Destroy(this.gameObject);
+        }
     }
 }

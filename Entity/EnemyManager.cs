@@ -78,9 +78,6 @@ public class EnemyManager : SpawnerManager {
         this.MinOfMovingRangeY = ConstantManager.EnemyRangeYMinWave1;
         this.SpeedY = ConstantManager.EnemyHorizontalSpeed;
 
-        this.CoolTime = 0;
-        this.coolTimeSpan = ConstantManager.TargetGeneratorCoolTime;
-
         this.FrequencyOfSwitchDirection = ConstantManager.EnemyMoveFrequencyOfSwitchDirection;
         this.SwitchMovingDirectionRandomly();
     }

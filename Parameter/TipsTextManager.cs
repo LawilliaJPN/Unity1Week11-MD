@@ -4,6 +4,9 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 
 public class TipsTextManager : MonoBehaviour {
+    [BoxGroup("Game"), ShowInInspector, ReadOnly]
+    public const string Tips3Wave = "3ウェーブの合計スコアを競うゲームだ。";
+
     [BoxGroup("Controll"), ShowInInspector, ReadOnly]
     public const string TipsControllMoveWASD  = "WASDキーで、移動することができる。";
 
@@ -18,6 +21,13 @@ public class TipsTextManager : MonoBehaviour {
 
     [BoxGroup("Controll"), ShowInInspector, ReadOnly]
     public const string TipsControllShootSpace = "スペースキーでも、弾を撃つことができる。";
+
+
+    [BoxGroup("Score"), ShowInInspector, ReadOnly]
+    public const string TipsScoreWhenBulletCollideWithTarget = "撃った弾が的に当たると、1ポイント加算される。";
+
+    [BoxGroup("Score"), ShowInInspector, ReadOnly]
+    public const string TipsScoreWhenGroupBulletCollideWithTarget = "的と的をつなげると、5ポイント加算される。";
 
 
     [BoxGroup("Collision"), ShowInInspector, ReadOnly]

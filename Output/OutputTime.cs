@@ -28,7 +28,14 @@ public class OutputTime : MonoBehaviour {
     private void UpdateTextTimer() {
         if (!GameDirector.IsGameRunning) {
             this.HideTextTimer();
-            this.HideTextTimerEmphasis();
+
+            if (GameDirector.TimerBeforeRetry > 0) {
+                this.textTimerEmphasis.text = Math.Ceiling(GameDirector.TimerBeforeRetry).ToString();
+
+            } else {
+                this.HideTextTimerEmphasis();
+            }
+
             return;
         }
 
@@ -54,11 +61,11 @@ public class OutputTime : MonoBehaviour {
         Invoke("HideTextWave", ConstantManager.TimeDisplayTextWave);
     }
 
-    private void HideTextTimer() {
+    public void HideTextTimer() {
         this.textTimer.text = "";
     }
 
-    private void HideTextWave() {
+    public void HideTextWave() {
         this.textWave.text = "";
     }
 

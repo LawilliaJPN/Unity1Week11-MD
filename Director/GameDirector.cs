@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
 
 public class GameDirector :MonoBehaviour {
@@ -8,9 +9,15 @@ public class GameDirector :MonoBehaviour {
     private GameObject objectPlayer;
     [SerializeField, BoxGroup("GameObject")]
     private GameObject objectEnemy;
+    [SerializeField, BoxGroup("GameObject")]
+    private GameObject objectButtonsInGame, objectButtonsInResult;
+    [SerializeField, BoxGroup("GameObject")]
+    private GameObject objectTextsInGame, objectTextsInResult;
 
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private BGMPlayer scriptBGMPlayer;
+    [BoxGroup("Component"), ShowInInspector, ReadOnly]
+    private OutputScore scriptOutputScore;
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private OutputTime scriptOutputTime;
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
@@ -36,6 +43,9 @@ public class GameDirector :MonoBehaviour {
         get {
             return isGameRunning;
         }
+        set {
+            isGameRunning = value;
+        }
     }
 
     [BoxGroup("Game"), ShowInInspector, ReadOnly]
@@ -56,11 +66,24 @@ public class GameDirector :MonoBehaviour {
         }
     }
 
+    [BoxGroup("Timer"), ShowInInspector, ReadOnly]
+    private static float timerBeforeRetry;
+
+    public static float TimerBeforeRetry {
+        get {
+            return timerBeforeRetry;
+        }
+    }
+
     [BoxGroup("Counter"), ShowInInspector, ReadOnly]
     private static float counterAlermSE;
 
+    [BoxGroup("Timer"), ShowInInspector, ReadOnly]
+    public static bool isAlreadyBeginCount = false;
+
     private void Awake() {
         this.scriptBGMPlayer = this.GetComponent<BGMPlayer>();
+        this.scriptOutputScore = this.GetComponent<OutputScore>();
         this.scriptOutputTime = this.GetComponent<OutputTime>();
         this.scriptOutputTips = this.GetComponent<OutputTips>();
         this.scriptDestroyAll = this.GetComponent<DestroyAll>();
@@ -75,17 +98,28 @@ public class GameDirector :MonoBehaviour {
 
         isGameRunning = true;
         currentWave = 0;
+        timerBeforeRetry = 0;
     }
 
     private void Start() {
+        this.SetDisactiveComponentsInResult();
+
         ScoreManager.ResetScores();
 
         this.NextWave();
+
+        if (!isAlreadyBeginCount) {
+            this.Retry();
+        }
     }
 
     private void Update() {
         if (isGameRunning) {
             timerInGame -= Time.deltaTime;
+        }
+
+        if (timerBeforeRetry > 0) {
+            timerBeforeRetry -= Time.deltaTime;
         }
 
         if (timerInGame < 0) {
@@ -128,37 +162,96 @@ public class GameDirector :MonoBehaviour {
                 break;
         }
 
-        this.scriptEnemyManager.CoolTime = 0;
+        if (isAlreadyBeginCount) {
+            this.scriptEnemyManager.CoolTime = 0;
 
-        TipsBoolManager.SetIsAlreadyTipsFalse();
-        this.scriptOutputTips.SetNextTips(TipsTextManager.Tips3Wave);
-        this.scriptOutputTips.UpdateOutputTipsInGame();
+            TipsBoolManager.SetIsAlreadyTipsFalse();
+            this.scriptOutputTips.SetNextTips(TipsTextManager.Tips3Wave);
+            this.scriptOutputTips.UpdateOutputTipsInGame();
 
-        counterAlermSE = ConstantManager.StandardOfTimerEmphasis;
+            counterAlermSE = ConstantManager.StandardOfTimerEmphasis;
 
-        this.scriptOutputTime.OutputCurrentWave();
+            this.scriptOutputTime.OutputCurrentWave();
 
-        this.scriptSEManager.PlaySEStartWave();
-
-        if (ConstantManager.IsDebugMode) {
-            Debug.Log("----------");
-            Debug.Log("WaveScore");
-            foreach (int waveScore in ScoreManager.WaveScores) {
-                Debug.Log(waveScore);
-            }
-            Debug.Log("----------");
+            this.scriptSEManager.PlaySEStartWave();
+            ScoreManager.DebugScore();
         }
+
     }
 
     private void FinishGame() {
-        this.scriptDestroyAll.DestroyAllGroup(ConstantManager.PointRatioType.WaveFinish);
+        this.StopGame();
+
+        this.SetDisactiveComponentsInGame();
+        this.SetActiveComponentsInResult();
+        this.scriptOutputScore.OutputTextResult();
+
         this.scriptBGMPlayer.PlayBGMResult();
+
+        ScoreManager.DebugScore();
+
+        naichilab.RankingLoader.Instance.SendScoreAndShowRanking(ScoreManager.TotalScore);
+    }
+
+    public void Retry() {
+        this.StopGame();
+
+        this.SetActiveTextsInGame();
+        this.SetDisactiveButtonsInGame();
+        this.SetDisactiveComponentsInResult();
+
+        this.scriptSEManager.PlaySEStartGame();
+
+        timerBeforeRetry = ConstantManager.TimeBeforeRetry;
+        Invoke("ReloadGameScene", ConstantManager.TimeBeforeRetry);
+    }
+
+    private void ReloadGameScene() {
+        isAlreadyBeginCount = true;
+        SceneManager.LoadScene("Game");
+    }
+
+    private void StopGame() {
+        this.scriptDestroyAll.DestroyAllGroup(ConstantManager.PointRatioType.WaveFinish);
 
         this.rendererPlayer.enabled = false;
         this.rendererEnemy.enabled = false;
 
         isGameRunning = false;
+        counterAlermSE = 0;
         timerInGame = 0;
+
+        this.scriptOutputTime.HideTextWave();
+
+        this.scriptBGMPlayer.StopBGM();
+    }
+
+    private void SetActiveTextsInGame() {
+        this.objectTextsInGame.SetActive(true);
+    }
+
+    private void SetActiveComponentsInGame() {
+        this.objectButtonsInGame.SetActive(true);
+        this.objectTextsInGame.SetActive(true);
+    }
+
+    private void SetActiveComponentsInResult() {
+        this.objectButtonsInResult.SetActive(true);
+        this.objectTextsInResult.SetActive(true);
+    }
+
+    private void SetDisactiveComponentsInGame() {
+        this.objectButtonsInGame.SetActive(false);
+        this.objectTextsInGame.SetActive(false);
+    }
+
+    private void SetDisactiveButtonsInGame() {
+        this.objectButtonsInGame.SetActive(false);
+    }
+
+    private void SetDisactiveComponentsInResult() {
+        this.objectButtonsInResult.SetActive(false);
+        this.objectTextsInResult.SetActive(false);
     }
 
     private void PlaySEAlerm() {

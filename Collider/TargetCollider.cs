@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using DG.Tweening;
 
 [RequireComponent(typeof(TargetManager))]
 
@@ -12,6 +13,9 @@ public class TargetCollider :MonoBehaviour {
     private DestroyAll scriptDestroyAll;
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private OutputTips scriptOutputTips;
+
+    [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
+    private GameObject objectMainCamera;
 
     [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
     private GameObject objectSEManager;
@@ -25,6 +29,8 @@ public class TargetCollider :MonoBehaviour {
         this.objectGameDirector = GameObject.FindWithTag("Director");
         this.scriptDestroyAll = this.objectGameDirector.GetComponent<DestroyAll>();
         this.scriptOutputTips = this.objectGameDirector.GetComponent<OutputTips>();
+
+        this.objectMainCamera = GameObject.FindWithTag("MainCamera");
 
         this.objectSEManager = GameObject.FindWithTag("SEManager");
         this.scriptSEManager = this.objectSEManager.GetComponent<SEManager>();
@@ -87,6 +93,7 @@ public class TargetCollider :MonoBehaviour {
         }
 
         this.scriptSEManager.PlaySEDamage();
+        this.objectMainCamera.transform.DOShakePosition(duration: 1.0f, strength: 0.5f, vibrato: 10, randomness: 90, snapping:false, fadeOut:true);
 
         this.scriptDestroyAll.DestroyAllGroup(ConstantManager.PointRatioType.PlayerCollideWithTarget);
 

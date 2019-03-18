@@ -5,7 +5,13 @@ using Sirenix.OdinInspector;
 
 public class ConstantManager : MonoBehaviour {
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
-    public const bool IsDebugMode = true;
+    public const bool IsDebugMode = false;
+
+    [BoxGroup("Information"), ShowInInspector, ReadOnly]
+    public const string GameIdAtUnityroom = "meteor_decagon";
+
+    [BoxGroup("Information"), ShowInInspector, ReadOnly]
+    public const string GameNameJaJP = "メテオデカゴン";
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
     public const int GameVersion = 1;
@@ -18,6 +24,9 @@ public class ConstantManager : MonoBehaviour {
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
     public const string GameVersionText = "1.0.0";
+
+    [BoxGroup("Information"), ShowInInspector, ReadOnly]
+    public const string TweetHashtag = "unity1week";
 
 
     [BoxGroup("Timer"), ShowInInspector, ReadOnly]
@@ -37,6 +46,9 @@ public class ConstantManager : MonoBehaviour {
 
     [BoxGroup("Timer"), ShowInInspector, ReadOnly]
     public const float StandardOfTimerEmphasis = 5.0f;
+
+    [BoxGroup("Timer"), ShowInInspector, ReadOnly]
+    public const float TimeBeforeRetry = 3.0f;
 
 
     [BoxGroup("Score"), ShowInInspector, ReadOnly]
@@ -81,6 +93,9 @@ public class ConstantManager : MonoBehaviour {
     [BoxGroup("Audio"), ShowInInspector, ReadOnly]
     public const float InitialVolumeSE = 0.9f;
 
+    [BoxGroup("Audio"), ShowInInspector, ReadOnly]
+    public const float StandardOfBGMWave3 = 1000;
+
 
     [BoxGroup("Speed"), ShowInInspector, ReadOnly]
     public const float BulletSpeed = -0.2f;
@@ -114,29 +129,32 @@ public class ConstantManager : MonoBehaviour {
     public const float EnemyRangeXMinWave1 = -15.0f;  // 仮
 
     [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
-    public const float EnemyRangeYMaxWave1 = 3.5f;
+    public const float EnemyRangeYMaxWave1 = 3.0f;
 
     [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
-    public const float EnemyRangeYMinWave1 = -3.5f;
+    public const float EnemyRangeYMinWave1 = -3.0f;
 
     [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
-    public const float PlayerRangeXMax = 8.0f;
+    public const float PlayerRangeXMax = 8.35f;
 
     [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
-    public const float PlayerRangeXMin = -7.5f;
+    public const float PlayerRangeXMin = -7.85f;
 
     [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
-    public const float PlayerRangeYMax = 3.5f;
+    public const float PlayerRangeYMax = 4.1f;
 
     [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
-    public const float PlayerRangeYMin = -3.5f;
+    public const float PlayerRangeYMin = -4.1f;
 
 
-    [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
+    [BoxGroup("Range"), ShowInInspector, ReadOnly]
     public const float OutOfBoundsRangeX = 15.0f;
 
-    [BoxGroup("MovingRange"), ShowInInspector, ReadOnly]
+    [BoxGroup("Range"), ShowInInspector, ReadOnly]
     public const float OutOfBoundsRangeY = 10.0f;
+
+    [BoxGroup("Range"), ShowInInspector, ReadOnly]
+    public const float BulletColliderRangeXMin = -9.5f;
 
 
     [BoxGroup("Children"), ShowInInspector, ReadOnly]
@@ -161,6 +179,9 @@ public class ConstantManager : MonoBehaviour {
     [BoxGroup("Generater"), ShowInInspector, ReadOnly]
     public const float TargetGeneratorCoolTimeWave3 = 1.2f;
 
+    [BoxGroup("Generater"), ShowInInspector, ReadOnly]
+    public const float BulletGeneratorPositionCorrection = -0.95f;
+    
 
     [BoxGroup("Auto"), ShowInInspector, ReadOnly]
     public const int EnemyMoveFrequencyOfSwitchDirection = 1000;

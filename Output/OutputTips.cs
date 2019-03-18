@@ -109,12 +109,17 @@ public class OutputTips : MonoBehaviour {
 
         this.listTextTipsRandomly.Add(TipsTextManager.TipsChildrenSlowdown);
 
+        this.listTextTipsRandomly.Add(TipsTextManager.TipsAdviceNotConnect);
         this.listTextTipsRandomly.Add(TipsTextManager.TipsAdviceConnect);
         this.listTextTipsRandomly.Add(TipsTextManager.TipsAdviceRight);
         this.listTextTipsRandomly.Add(TipsTextManager.TipsAdviceNotRapidFire);
 
         this.listTextTipsRandomly.Add(TipsTextManager.TipsScoreWhenBulletCollideWithTarget);
         this.listTextTipsRandomly.Add(TipsTextManager.TipsScoreWhenGroupBulletCollideWithTarget);
+        this.listTextTipsRandomly.Add(TipsTextManager.TipsScoreWhenTargetCollideWithTarget);
+        this.listTextTipsRandomly.Add(TipsTextManager.TipsScoreWhenPlayerCollideWithTarget);
+        this.listTextTipsRandomly.Add(TipsTextManager.TipsScoreWhenWaveFinish);
+        this.listTextTipsRandomly.Add(TipsTextManager.TipsScoreExplosion);
     }
 
     private string GetTipsRandomly() {

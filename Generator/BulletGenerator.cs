@@ -29,7 +29,10 @@ public class BulletGenerator : MonoBehaviour {
 
         this.scriptSEManager.PlaySEShoot();
 
-        GameObject bullet = Instantiate(this.prefabBullet, this.transform.position, Quaternion.identity) as GameObject;
+        Vector3 generatePosition = this.transform.position;
+        generatePosition.x += ConstantManager.BulletGeneratorPositionCorrection;
+
+        GameObject bullet = Instantiate(this.prefabBullet, generatePosition, Quaternion.identity) as GameObject;
         bullet.transform.SetParent(this.objectParentOfBullets.transform);
     }
 }

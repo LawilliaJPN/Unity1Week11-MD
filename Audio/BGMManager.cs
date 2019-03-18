@@ -112,28 +112,37 @@ public class BGMManager : AudioManager {
         }
     }
 
+    private void ChangeMusicInGame(AudioClip newMusic, int newBPM) {
+        this.StopAudio();
+
+        this.audioSource.clip = newMusic;
+        BPM = newBPM;
+
+        this.PlayAudio();
+    }
+
     public void PlayBGMTitle() {
         this.ChangeMusic(this.bgmTitle, BpmBGMTitle);
     }
 
     public void PlayBGMResult() {
-        this.ChangeMusic(this.bgmResult, BpmBGMResult);
+        this.ChangeMusicInGame(this.bgmResult, BpmBGMResult);
     }
 
     public void PlayBGMWave1() {
-        this.ChangeMusic(this.bgmWave1, BpmBGMWave1);
+        this.ChangeMusicInGame(this.bgmWave1, BpmBGMWave1);
     }
 
     public void PlayBGMWave2() {
-        this.ChangeMusic(this.bgmWave2, BpmBGMWave2);
+        this.ChangeMusicInGame(this.bgmWave2, BpmBGMWave2);
     }
 
     public void PlayBGMWave3A() {
-        this.ChangeMusic(this.bgmWave3A, BpmBGMWave3A);
+        this.ChangeMusicInGame(this.bgmWave3A, BpmBGMWave3A);
     }
 
     public void PlayBGMWave3B() {
-        this.ChangeMusic(this.bgmWave3B, BpmBGMWave3B);
+        this.ChangeMusicInGame(this.bgmWave3B, BpmBGMWave3B);
     }
 
     public void SwitchBGM() {

@@ -88,4 +88,17 @@ public class ScoreManager : MonoBehaviour {
             Debug.Log("(TargetNum: " + numOfTargetChildren + " PointRatio:" + (int)pointRatioType + ")");
         }
     }
+
+    public static void DebugScore() {
+        if (!ConstantManager.IsDebugMode) {
+            return;
+        }
+
+        Debug.Log("----------");
+        Debug.Log("WaveScore");
+        foreach (int waveScore in WaveScores) {
+            Debug.Log(waveScore);
+        }
+        Debug.Log("----------");
+    }
 }

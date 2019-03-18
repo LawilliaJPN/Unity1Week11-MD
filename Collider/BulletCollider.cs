@@ -38,6 +38,10 @@ public class BulletCollider :MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
+        if (this.transform.position.x < ConstantManager.BulletColliderRangeXMin) {
+            return;
+        }
+
         if (collision.gameObject.tag == "Target") {
             this.CollisionWithTarget(collision);
 

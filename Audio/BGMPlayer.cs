@@ -36,7 +36,7 @@ public class BGMPlayer : MonoBehaviour {
     }
 
     public void PlayBGMWave3() {
-        if (Random.Range(0, 1 + 1) == 0) {
+        if (ScoreManager.TotalScore < ConstantManager.StandardOfBGMWave3) {
             this.scriptBGMManager.PlayBGMWave3A();
         } else {
             this.scriptBGMManager.PlayBGMWave3B();
@@ -45,5 +45,9 @@ public class BGMPlayer : MonoBehaviour {
 
     public void PlayBGMResult() {
         this.scriptBGMManager.PlayBGMResult();
+    }
+
+    public void StopBGM() {
+        this.scriptBGMManager.StopAudio();
     }
 }

@@ -11,6 +11,6 @@ public class PreloadDirector :MonoBehaviour {
     private void Start() {
         DontDestroyOnLoad(this.objectGameManagers);
 
-        SceneManager.LoadScene("Title");
+        SceneManager.LoadScene("Game"); // Preload
     }
 }

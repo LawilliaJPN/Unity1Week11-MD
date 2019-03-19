@@ -66,6 +66,10 @@ public class TargetCollider :MonoBehaviour {
         bool thisIsIsolated = objectThisParent.tag != "GroupParent";
         bool collisionBulletIsIsolated = objectCollisionTargetParent.tag != "GroupParent";
 
+        if (objectThisParent == objectCollisionTargetParent) {
+            return;
+        }
+
         if (!TipsBoolManager.isAlreadyTipsCollisionTargetAndTarget) {
             this.scriptOutputTips.SetNextTips(TipsTextManager.TipsCollisionTargetAndTarget);
             TipsBoolManager.isAlreadyTipsCollisionTargetAndTarget = true;

@@ -20,10 +20,10 @@ public class ConstantManager : MonoBehaviour {
     public const int GameVersionMajor = 0;
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
-    public const int GameVersionMinor = 0;
+    public const int GameVersionMinor = 1;
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
-    public const string GameVersionText = "1.0.0";
+    public const string GameVersionText = "1.0.1";
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
     public const string TweetHashtag = "unity1week";
@@ -72,6 +72,10 @@ public class ConstantManager : MonoBehaviour {
         WaveFinish = 4,
         BulletCollideWithTarget = 5
     }
+
+    [BoxGroup("Score"), ShowInInspector, ReadOnly]
+    public const int NumOfRankingOutput = 100;
+    
     /*
     [BoxGroup("Score"), ShowInInspector, ReadOnly]
     public const int PointRatioToDestroyWhenPlayerCollideWithTarget = 1;

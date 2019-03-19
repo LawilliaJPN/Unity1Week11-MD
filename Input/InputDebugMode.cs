@@ -15,7 +15,6 @@ public class InputDebugMode : MonoBehaviour {
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private SEManager scriptSEManager;
 
-
     [BoxGroup("GameObject"), ShowInInspector, ReadOnly]
     private GameObject objectGameDirector;
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
@@ -39,12 +38,6 @@ public class InputDebugMode : MonoBehaviour {
             return;
         }
 
-        if (Input.GetKey(KeyCode.Delete)) {
-            if (SceneManager.GetActiveScene().name == "Game") {
-                this.scriptDestroyAll.DestroyAllGroup(ConstantManager.PointRatioType.Debug);
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.RightAlt)) {
             this.scriptBGMManager.SwitchBGM();
         }
@@ -53,8 +46,18 @@ public class InputDebugMode : MonoBehaviour {
             this.scriptSEManager.PlaySETest();
         }
 
-        if (Input.GetKeyDown(KeyCode.RightShift)) {
-            if (SceneManager.GetActiveScene().name == "Title") {
+        if (SceneManager.GetActiveScene().name == "Game") {
+            if (Input.GetKey(KeyCode.End)) {
+                GameDirector.TimerInGame = 0;
+            }
+
+            if (Input.GetKey(KeyCode.Delete)) {
+                this.scriptDestroyAll.DestroyAllGroup(ConstantManager.PointRatioType.Debug);
+            }
+        }
+
+        if (SceneManager.GetActiveScene().name == "Title") {
+            if (Input.GetKeyDown(KeyCode.RightShift)) {
                 SceneManager.LoadScene("Game");
             }
         }

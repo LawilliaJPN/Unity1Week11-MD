@@ -64,6 +64,9 @@ public class GameDirector :MonoBehaviour {
         get {
             return timerInGame;
         }
+        set {
+            timerInGame = value;
+        }
     }
 
     [BoxGroup("Timer"), ShowInInspector, ReadOnly]

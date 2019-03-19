@@ -30,7 +30,7 @@ public class InputButton : MonoBehaviour {
             return;
         }
 
-        string tweetSentence = "【" + ConstantManager.GameNameJaJP + " " + ConstantManager.GameVersionText + "】今回のスコア：" + ScoreManager.TotalScore;
+        string tweetSentence = "【" + ConstantManager.GameNameJaJP + " ver." + ConstantManager.GameVersionText + "】今回のスコア：" + ScoreManager.TotalScore;
         naichilab.UnityRoomTweet.Tweet(ConstantManager.GameIdAtUnityroom, tweetSentence, ConstantManager.TweetHashtag, ConstantManager.GameIdAtUnityroom);
     }
 

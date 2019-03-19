@@ -34,7 +34,7 @@ public class TipsTextManager : MonoBehaviour {
     public const string TipsScoreWhenTargetCollideWithTarget = "的同士が衝突した時のスコア加算は、本来の4割だ。";
 
     [BoxGroup("Score"), ShowInInspector, ReadOnly]
-    public const string TipsScoreWhenPlayerCollideWithTarget = "的に当たった時のスコア加算は、本来の2割だ。";
+    public const string TipsScoreWhenPlayerCollideWithTarget = "ミスになって的が消えた時のスコア加算は、本来の2割だ。";
 
     [BoxGroup("Score"), ShowInInspector, ReadOnly]
     public const string TipsScoreWhenWaveFinish = "ウェーブ終了時に消えた的からのスコア加算は、本来の8割だ。";
@@ -53,7 +53,7 @@ public class TipsTextManager : MonoBehaviour {
     public const string TipsCollisionTargetAndBullet = "弾と的が衝突すると、「つながる」。";
 
     [BoxGroup("Collision"), ShowInInspector, ReadOnly]
-    public const string TipsCollisionTargetAndPlayer = "的と接触すると、すべての弾や的が消える。";
+    public const string TipsCollisionTargetAndPlayer = "的と接触してしまうと、すべての弾や的が消える。";
 
     [BoxGroup("Collision"), ShowInInspector, ReadOnly]
     public const string TipsCollisionTargetAndTarget = "的同士で衝突すると、消滅してスコアが少し加算される。";

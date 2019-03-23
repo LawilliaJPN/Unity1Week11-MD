@@ -12,7 +12,7 @@ public class GameDirector :MonoBehaviour {
     [SerializeField, BoxGroup("GameObject")]
     private GameObject objectButtonsInGame, objectButtonsInResult;
     [SerializeField, BoxGroup("GameObject")]
-    private GameObject objectTextsInGame, objectTextsInResult;
+    private GameObject objectTextsInGame, objectTextsInResult, objectTextInGameHeader;
 
     [BoxGroup("Component"), ShowInInspector, ReadOnly]
     private BGMPlayer scriptBGMPlayer;
@@ -125,6 +125,10 @@ public class GameDirector :MonoBehaviour {
             timerBeforeRetry -= Time.deltaTime;
         }
 
+        if (timerInGame < ConstantManager.GameTimeWave1 - ConstantManager.StandardOfTimerHeader) {
+            this.SetDisactiveComponentsHeader();
+        }
+
         if (timerInGame < 0) {
             if (currentWave == ConstantManager.NumberOfWaves) {
                 this.FinishGame();
@@ -186,6 +190,7 @@ public class GameDirector :MonoBehaviour {
         this.StopGame();
 
         this.SetDisactiveComponentsInGame();
+        this.SetDisactiveComponentsHeader();
         this.SetActiveComponentsInResult();
         this.scriptOutputScore.OutputTextResult();
 
@@ -200,6 +205,7 @@ public class GameDirector :MonoBehaviour {
         this.StopGame();
 
         this.SetActiveTextsInGame();
+        this.SetDisactiveComponentsHeader();
         this.SetDisactiveButtonsInGame();
         this.SetDisactiveComponentsInResult();
 
@@ -242,7 +248,7 @@ public class GameDirector :MonoBehaviour {
         this.objectButtonsInResult.SetActive(true);
         this.objectTextsInResult.SetActive(true);
     }
-
+    
     private void SetDisactiveComponentsInGame() {
         this.objectButtonsInGame.SetActive(false);
         this.objectTextsInGame.SetActive(false);
@@ -255,6 +261,10 @@ public class GameDirector :MonoBehaviour {
     private void SetDisactiveComponentsInResult() {
         this.objectButtonsInResult.SetActive(false);
         this.objectTextsInResult.SetActive(false);
+    }
+
+    private void SetDisactiveComponentsHeader() {
+        this.objectTextInGameHeader.SetActive(false);
     }
 
     private void PlaySEAlerm() {

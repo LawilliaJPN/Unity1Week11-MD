@@ -17,13 +17,13 @@ public class ConstantManager : MonoBehaviour {
     public const int GameVersion = 1;
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
-    public const int GameVersionMajor = 0;
+    public const int GameVersionMajor = 1;
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
-    public const int GameVersionMinor = 1;
+    public const int GameVersionMinor = 0;
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
-    public const string GameVersionText = "1.0.1";
+    public const string GameVersionText = "1.1.0";
 
     [BoxGroup("Information"), ShowInInspector, ReadOnly]
     public const string TweetHashtag = "unity1week";
@@ -46,6 +46,9 @@ public class ConstantManager : MonoBehaviour {
 
     [BoxGroup("Timer"), ShowInInspector, ReadOnly]
     public const float StandardOfTimerEmphasis = 5.0f;
+
+    [BoxGroup("Timer"), ShowInInspector, ReadOnly]
+    public const float StandardOfTimerHeader = 6.5f;
 
     [BoxGroup("Timer"), ShowInInspector, ReadOnly]
     public const float TimeBeforeRetry = 3.0f;
@@ -89,7 +92,6 @@ public class ConstantManager : MonoBehaviour {
     [BoxGroup("Score"), ShowInInspector, ReadOnly]
     public const int PointRatioToDestroyWhenBulletCollideWithTarget = 5;
     */
-
 
     [BoxGroup("Audio"), ShowInInspector, ReadOnly]
     public const float InitialVolumeBGM = 0.6f;
@@ -202,7 +204,7 @@ public class ConstantManager : MonoBehaviour {
 
 
     [BoxGroup("Tips"), ShowInInspector, ReadOnly]
-    public const int NumOfTipsInGame = 15;
+    public const int NumOfTipsInGame = 10;
 
     [BoxGroup("Tips"), ShowInInspector, ReadOnly]
     public const int OrderOfTipsMoveWASD = 0;

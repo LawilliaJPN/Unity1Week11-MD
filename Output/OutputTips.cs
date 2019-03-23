@@ -63,6 +63,11 @@ public class OutputTips : MonoBehaviour {
             return;
         }
 
+        if (GameDirector.CurrentWave >= ConstantManager.NumberOfWaves) {
+            this.textTipsInGame.text = "";
+            return;
+        }
+
         if (this.arrayTextTips[this.currentTipsNumber] != "") {
             this.OutputTipsInGame(this.arrayTextTips[this.currentTipsNumber]);
 
@@ -81,7 +86,7 @@ public class OutputTips : MonoBehaviour {
             Debug.Log("OutputTips OutputTipsInGame / Timer:" + GameDirector.TimerInGame + "TipsNum:" + this.currentTipsNumber);
         }
 
-        this.textTipsInGame.text = "[Tips] " + newTextTips;
+        this.textTipsInGame.text = newTextTips;
         this.arrayTextTips[this.currentTipsNumber] = newTextTips;
 
         if (this.currentTipsNumber == ConstantManager.OrderOfTipsShootClick) {
